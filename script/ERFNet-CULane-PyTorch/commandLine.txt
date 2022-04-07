@@ -1,0 +1,6 @@
+### Launch anaconda environment first
+### Activate ERFNet environment and launch a terminal
+### Go into /home/mec-lab/LBX/Codes_for_Lane_Detection/ERFNet-CULane-PyTorch
+
+sh ./test_video_erfnet.sh
+

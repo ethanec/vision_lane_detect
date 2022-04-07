@@ -1,0 +1,115 @@
+class HDPipeline:
+    def __init__(self):
+        with open('Calibration.yml', 'r') as stream:
+            cam_data = yaml.load(stream)
+        self.cameraExtrinsicMat = np.reshape(cam_data['CameraExtrinsicMat']['data'], (4, 4))
+        self.cameraMat = np.reshape(cam_data['CameraMat']['data'], (3, 3))
+        self.imageSize = cam_data['ImageSize']
+        self.distCoeff = cam_data['DistCoeff']
+        self.reProjectionError = cam_data['ReprojectionError']
+
+        self.car_origin = [-8172.4245951511, 6788.6478131412, -45.7949960938]
+        self.car_position_Time = []
+        self.car_position_NED = []
+        self.edge_NE = []
+        self.central_NE = []
+
+        car_position_file = 'position_data/car_position.xls'
+        edge_file = 'position_data/sl_edge.xls'
+        central_file = 'position_data/sl_central.xls'
+
+        car_position_df = pd.read_excel(car_position_file)
+        edge_df = pd.read_excel(edge_file)
+        central_df = pd.read_excel(central_file)
+
+        self.car_position_Time = car_position_df.iloc[:, 6]
+        self.car_position_NED = np.array(car_position_df.iloc[:, 0:3])
+        self.egde_NE = np.array(edge_df.iloc[:, 0:2])
+        self.central_NE = np.array(central_df.iloc[:, 0:2])
+
+    def world_to_camera(self, lane_points, lidar):
+        X = lane_points[0] - lidar[0]
+        Y = lane_points[1] - lidar[1]
+        Z = 1.55
+        worldCoord = np.array([X, Y, Z, 1])
+        return np.dot(self.cameraExtrinsicMat, worldCoord)
+
+    def camera_to_image(self, cameraCoord):
+
+        return np.dot(self.cameraMat, cameraCoord)
+
+    def front_direction_estimation(self, now_position, last_position):
+        estimate_range = 4 #meter
+        to_lidar_range = 1.72 #meter
+        ne_vector = now_position - last_position # Vector of the car's heading
+        distance = (((ne_vector[0]) ** 2 + (ne_vector[1]) ** 2) ** 0.5)
+        ratio_to_one_meter = 1 / (((ne_vector[0]) ** 2 + (ne_vector[1]) ** 2) ** 0.5)
+        unit_NE_vector = ne_vector * ratio_to_one_meter
+        point1 = now_position + unit_NE_vector * estimate_range
+        point2 = now_position + unit_NE_vector * to_lidar_range
+        return point1, point2, ne_vector, distance
+
+    def sort_closetToFarthest(self, p, lane):
+        d = (((lane[:] - p)[:, 0]) ** 2 + ((lane[:] - p)[:, 1]) ** 2) ** 0.5
+        d = d.tolist()
+        lane = lane.tolist()
+        for idx, i in enumerate(lane):
+            i.append(d[idx])
+        
+        lane = sorted(lane, key = lambda x: x[2])
+        
+        sorted_lane = []
+        for j in lane:
+            sorted_lane.append(j[0:2])
+        
+        return np.array(sorted_lane)
+
+    def find_center_lane_point(self, central_NE, point, ne_vector):
+        measure_range = 4 #meter
+        distance = (((central_NE[:] - point)[:, 0]) ** 2 + ((central_NE[:] - point)[:, 1]) ** 2) ** 0.5 # Distance of central lanes to the base point, which is 4 meters in front of the car.
+        #lane_point = central_NE[distance < measure_range] # Find the distance which is in range of 4 meters.
+        lane_point = self.sort_closetToFarthest(point, central_NE[distance < measure_range])
+        '''
+        front_lane = []
+        for i in lane_point:
+            a_vec = i - point #
+            b_vec = ne_vector # Vector of the car's heading
+            a_len = (a_vec[0] ** 2 + a_vec[1] ** 2) ** 0.5
+            b_len = (b_vec[0] ** 2 + b_vec[1] ** 2) ** 0.5
+            cosine = np.dot(a_vec, b_vec) / ((a_len) * (b_len))
+            if cosine >= 0:
+                front_lane.append(i)
+        #print('----------')
+        #print(lane_point)
+        #print('----------')
+        
+        front_lane = np.array(front_lane)
+        #print(front_lane)
+        return front_lane
+        '''
+        return lane_point
+
+    def find_edge_lane_point(self, edge_NE, point, ne_vector):
+        measure_range = 4 #meter
+        distance = (((edge_NE[:] - point)[:, 0]) ** 2 + ((edge_NE[:] - point)[:, 1]) ** 2) ** 0.5 # Distance of central lanes to the base point, which is 4 meters in front of the car.
+        #lane_point = edge_NE[distance < measure_range] # Find the distance which is in range of 4 meters.
+        lane_point = self.sort_closetToFarthest(point, edge_NE[distance < measure_range])
+        '''
+        front_lane = []
+        for i in lane_point:
+            a_vec = i - point #
+            b_vec = ne_vector # Vector of the car's heading
+            a_len = (a_vec[0] ** 2 + a_vec[1] ** 2) ** 0.5
+            b_len = (b_vec[0] ** 2 + b_vec[1] ** 2) ** 0.5
+            cosine = np.dot(a_vec, b_vec) / ((a_len) * (b_len))
+            if cosine >= 0:
+                front_lane.append(i)
+        #print('----------')
+        #print(lane_point)
+        #print('----------')
+        
+        front_lane = np.array(front_lane)
+        #print(front_lane)
+        return front_lane
+        '''
+        return lane_point

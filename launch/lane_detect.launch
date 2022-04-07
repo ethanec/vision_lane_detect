@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="vision_lane_detect" name="HD_lane" type="HD_lane_detect_opt"/>
+    <node pkg="vision_lane_detect" name="line_ocv" type="vision_lane_detect"/>
+    <node pkg="vision_lane_detect" name="KF_lane_self_localization_node" type="KF_lane_self_localization_opt_run.py" output="screen"/>
+</launch>
