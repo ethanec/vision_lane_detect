@@ -1,5 +1,5 @@
 # vision_lane_detect
-A lane detect algorithm that can be added in Autoware
+A lane detect algorithm designed by LBX that can be added in Autoware
 
 ## Launching process
 1. Autoware should be launch first!
