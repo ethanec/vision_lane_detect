@@ -4,17 +4,17 @@ project(vision_lane_detect)
 
 find_package(autoware_msgs REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
-  cv_bridge
-  image_transport
-  roscpp
-  autoware_msgs
-	tf # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Fucking Important
-	message_generation
-	####### YC ####### 
-	vector_map_msgs 
-	dbw_mkz_msgs
-	rospy
-	####### YC ####### 
+        cv_bridge
+        image_transport
+        roscpp
+        autoware_msgs
+        tf
+        message_generation
+        ####### YC ####### 
+        vector_map_msgs 
+        dbw_mkz_msgs
+        rospy
+        ####### YC ####### 
 )
 find_package(OpenCV REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -34,14 +34,14 @@ generate_messages(
 )
 
 catkin_package(
-  #  INCLUDE_DIRS include
-  #  LIBRARIES vision_lane_detect
-  CATKIN_DEPENDS roscpp message_runtime
-  #  DEPENDS system_lib
-	####### YC ####### 
-	vector_map_msgs 
-	dbw_mkz_msgs
-	####### YC ####### 	
+        #  INCLUDE_DIRS include
+        #  LIBRARIES vision_lane_detect
+        CATKIN_DEPENDS roscpp message_runtime
+        #  DEPENDS system_lib
+        ####### YC ####### 
+        vector_map_msgs 
+        dbw_mkz_msgs
+        ####### YC ####### 	
 )
 
 ####### YC ####### 
