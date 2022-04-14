@@ -11,7 +11,7 @@ class LateralDistance(object):
         # Derived from the camera calibration #
         #######################################
         
-        # wrold frame using xsens receiver as origin
+        # world frame using xsens receiver as origin
         projection_matrix = np.array([-1.52306968e+02, 2.87346122e+02, 1.46375024e+02, \
                                       -8.39373683e+01, -4.78781647e+00, -2.15631911e+02, \
                                       -3.56601520e-01, -9.89849613e-03])

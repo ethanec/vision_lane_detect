@@ -511,7 +511,7 @@ int main(int argc, char *argv[])
   ros::NodeHandle n;
   ros::NodeHandle private_nh("~");
   std::string image_topic_name;
-  private_nh.param<std::string>("image_raw_topic", image_topic_name, "/gmsl_camera/port_0/cam_0/image_raw");
+  private_nh.param<std::string>("image_raw_topic", image_topic_name, "/gmsl_camera/port_0/cam_0/image_raw"); // change topic name
   //private_nh.param<std::string>("image_raw_topic", image_topic_name, "/image_raw");
   ROS_INFO("Setting image topic to %s", image_topic_name.c_str());
 

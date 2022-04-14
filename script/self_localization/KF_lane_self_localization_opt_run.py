@@ -308,7 +308,7 @@ class KalmanFilter():
     def bivariate_linear_equation(self, p1, p2):
         A = np.array([[p1[0], 1],
                       [p2[0], 1]])
-        if np.linalg.det(A) != 0:
+        if np.linalg.det(A) != 0: # caluclate determinate
             B = np.array([p1[1], p2[1]]).reshape(2, 1)
             A_inv = np.linalg.inv(A)
             C = A_inv.dot(B)
@@ -347,7 +347,7 @@ class KalmanFilter():
         print('X Variance: {}'.format(np.std(self.error[:, 0]) ** 2))
         print('Y Variance: {}'.format(np.std(self.error[:, 1]) ** 2))
         
-        save_data_path = "/home/mec-lab/Autoware/ros/src/computing/perception/detection/vision_detector/packages/vision_lane_detect/script/self_localization/save_data"
+        save_data_path = "/home/meclab/autoware.ai/src/autoware/core_perception/vision_lane_detect/script/self_localization/result"
         out1 = csv.writer(open(save_data_path + "/ndt_position.csv","w"), delimiter=',')
         for r in self.save_ndt_position:
             out1.writerow(r)
