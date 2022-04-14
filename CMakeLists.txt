@@ -60,8 +60,8 @@ include_directories(
         ${catkin_INCLUDE_DIRS}
         ${autoware_msgs_INCLUDE_DIRS}
         nodes/vision_lane_detect
-				nodes/HD_lane_detect
-				nodes/HD_lane_detect_opt
+	nodes/HD_lane_detect
+	nodes/HD_lane_detect_opt
         ${OpenCV_INCLUDE_DIRS}
 )
 
@@ -129,7 +129,10 @@ install(TARGETS HD_lane_detect_opt
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-
+install(DIRECTORY launch/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+  PATTERN ".svn" EXCLUDE
+)
 
 
 
