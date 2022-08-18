@@ -24,10 +24,10 @@ class KalmanFilter():
 
     def __init__(self):
         car_position_topic_name = '/xsens/gps/pose'
-        whiteline_world_points_topic_name = 'world_line_points_topic'
+        whiteline_world_points_topic_name = 'world_line_points_topic'  # four coordinate x, y, z
         #detection_image_points_topic_name = 'erfNet_line_points_topic'
-        detection_image_points_topic_name = 'opencv_image_line_points_topic'
-        world_lane_points_topic_name = 'world_lane_points_topic'
+        detection_image_points_topic_name = 'opencv_image_line_points_topic' # detected x, y coordiante of two lane
+        world_lane_points_topic_name = 'world_lane_points_topic' # one coordinate x, y, z and sometimes shift
         
         rospy.loginfo('Setting topic to %s', car_position_topic_name)
         rospy.loginfo('Setting topic to %s', whiteline_world_points_topic_name)

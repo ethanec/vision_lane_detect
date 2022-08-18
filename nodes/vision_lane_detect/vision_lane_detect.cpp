@@ -325,8 +325,8 @@ static void process_image_common(IplImage *frame)
         ipt_l.x += line_lt.last_fit_pixel.at<double>(j, 0) * pow(i, j);
         ipt_r.x += line_rt.last_fit_pixel.at<double>(j, 0) * pow(i, j);
       }
-      cvCircle(output, ipt_l, 5, CvScalar(255, 0, 0), CV_FILLED, CV_AA);
-      cvCircle(output, ipt_r, 5, CvScalar(0, 0, 255), CV_FILLED, CV_AA);
+      cvCircle(output, ipt_l, 5, CvScalar(0, 255, 0), CV_FILLED, CV_AA); // left lane color
+      cvCircle(output, ipt_r, 5, CvScalar(255, 0, 127), CV_FILLED, CV_AA); // right lane color
     }
     
     cvWarpPerspective(output, output, inv_M);
